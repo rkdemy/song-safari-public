@@ -1,0 +1,153 @@
+.container {
+  padding: 4rem;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: white;
+}
+
+.hero_content {
+  display: block;
+  text-align: start;
+  position: relative;
+}
+
+.hero h2 {
+  font-size: 48px;
+  font-family: "VT323";
+  margin: 0;
+}
+
+.hero h3 {
+  font-size: 2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 18px;
+  margin: 1.5rem 0 1rem 0;
+  max-width: 1000px;
+}
+
+.sectionTitle span {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  font-size: 96px;
+}
+
+.hero button {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  padding: 1rem 2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero button:hover {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+.loading {
+  animation: loader 1s infinite linear;
+}
+
+.button:hover {
+  background-color: white;
+  color: black;
+}
+
+.tab {
+  margin-top: 4rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.tab h1 {
+  text-decoration: underline;
+}
+
+.tab_content {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.tab img {
+  width: 600px;
+}
+
+.songsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+
+  place-items: center;
+}
+
+.song {
+  padding: 1rem;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero h3 {
+    font-size: 1.5rem;
+  }
+
+  .songsGrid {
+    place-items: unset;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .tab img {
+    max-width: 100%;
+  }
+
+  .songsGrid {
+    gap: 0;
+  }
+
+  .songsGrid h3 {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .hero h3 {
+    font-size: 1rem;
+  }
+
+  .tab img {
+    max-width: 100%;
+  }
+}

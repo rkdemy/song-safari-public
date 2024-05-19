@@ -1,0 +1,55 @@
+.musicPlayer_container {
+  padding: 2rem;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  border-radius: 40px;
+  z-index: 99;
+  background-color: rgba(14, 14, 18, 0.776);
+  overflow: hidden;
+  animation: heightAnimate 2s ease-in-out;
+}
+
+.track_image_container {
+  width: fit-content;
+  position: relative;
+}
+
+.track_image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  z-index: 99;
+}
+
+.blur {
+  position: absolute;
+  top: 0%;
+  left: -5%;
+  width: 110%;
+  height: 120%;
+  z-index: -1 !important;
+  filter: blur(40px);
+  opacity: 1;
+}
+
+.musicPlayer_container a {
+  font-size: 24px;
+  font-family: "VT323", monospace;
+  text-decoration: none;
+}
+
+.musicPlayer_container div {
+  font-family: "VT323", monospace;
+}
+
+@keyframes heightAnimate {
+  from {
+    height: 0px;
+    width: 100%;
+  }
+  to {
+    width: 100%;
+    height: 580px;
+  }
+}

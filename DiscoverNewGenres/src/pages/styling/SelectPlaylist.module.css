@@ -1,0 +1,149 @@
+.selectPlaylist {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+.selectedPlaylist_container {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  position: relative;
+}
+
+.musicPlayer_content {
+  max-width: 500px;
+  overflow: hidden;
+  position: relative;
+  animation: widthAnimate 2s ease-in-out;
+}
+
+@keyframes widthAnimate {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.playlist_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: visible;
+  width: 600px;
+  height: 100%;
+}
+
+.confirmButton {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  width: fit-content;
+  padding: 1rem 2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 18px;
+}
+
+.confirmButton:hover {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+.similarityThreshold {
+  margin-bottom: 20px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.similarityThreshold h3 {
+  font-family: "IBM Plex Mono";
+  font-size: 16px;
+}
+
+.sliderContainer {
+  position: relative;
+}
+
+.similarityThreshold input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.similarityThreshold input[type="range"]:hover {
+  opacity: 1;
+}
+
+.similarityThreshold input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.thresholdValue {
+  font-size: 24px;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .selectPlaylist {
+    height: auto;
+  }
+
+  .selectedPlaylist_container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .playlist_content {
+    width: 100%;
+    gap: 0rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .selectedPlaylist_container {
+    padding: 1rem;
+  }
+
+  .selectedPlaylist_container {
+    display: block;
+  }
+
+  .musicPlayer_content {
+    margin-top: 2rem;
+  }
+}

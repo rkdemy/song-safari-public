@@ -1,0 +1,160 @@
+.song_container {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.song_container__scroll {
+  /* clip-path: inset(-100vw -100vw -100vw 0); */
+  cursor: grab;
+
+  animation: revealSlider 2s ease-in-out;
+}
+
+.song_container__content {
+  justify-content: center;
+  height: min-content;
+  overflow: hidden;
+  padding: 1.5rem;
+  max-width: 200px;
+  z-index: 99;
+  border-radius: 20px;
+  color: #e0e0e0;
+}
+
+.song_container__content_selected {
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgb(204, 204, 204);
+  z-index: 99;
+  color: #15161c;
+}
+
+.song_container {
+  :global .slick-list {
+    position: relative;
+    overflow: visible;
+  }
+
+  :global .slick-slide {
+    position: relative;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  :global .slick-track {
+    display: flex;
+    /* gap: 1rem; */
+  }
+
+  :global .slick-slider {
+    position: relative;
+  }
+
+  :global .slick-slide:not(.slick-active) {
+    opacity: 0.2;
+  }
+}
+
+.song_container h1 {
+  padding: 0;
+  margin: 0;
+}
+
+.song_container span {
+  text-transform: uppercase;
+}
+
+.image {
+  width: fit-content;
+  position: relative;
+}
+
+.song_image {
+  z-index: 99;
+  width: 160px;
+}
+
+.blur {
+  position: absolute;
+  top: 0%;
+  left: -2%;
+  width: 104%;
+  height: 104%;
+  z-index: -1 !important;
+  filter: blur(10px);
+  opacity: 1;
+}
+
+.song_details {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.artists_names {
+  display: flex;
+  gap: 1rem;
+}
+
+.song_container__content li {
+  width: 45px;
+  height: 45px;
+  list-style-type: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 150px;
+  background: #e0e0e0;
+  box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #f9f9f9;
+}
+
+.song_container__content h3 {
+  display: flex;
+}
+
+.song_container__content h3,
+.song_container__content h4 {
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@keyframes revealSlider {
+  0% {
+    clip-path: inset(100vw 100vw 100vw);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(-100vw -100vw -100vw 0);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .song_container__scroll {
+    clip-path: none;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .song_image {
+    z-index: 99;
+    width: 100%;
+  }
+
+  .song_container__content {
+    justify-content: center;
+    height: min-content;
+    overflow: hidden;
+    padding: 1rem;
+    max-width: 150px;
+    z-index: 99;
+    border-radius: 20px;
+
+    color: #e0e0e0;
+  }
+
+  .song_container h1 {
+    font-size: 36px;
+  }
+}

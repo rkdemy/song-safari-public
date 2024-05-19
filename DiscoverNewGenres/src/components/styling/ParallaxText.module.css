@@ -1,0 +1,30 @@
+/* Sliding Text */
+.parallax {
+  margin: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  font-family: "IBM Plex Mono";
+}
+
+.parallax:nth-child(1) {
+  opacity: 1;
+}
+
+.parallax:nth-child(2) {
+  opacity: 0.9;
+}
+.parallax:nth-child(3) {
+  opacity: 0.8;
+}
+
+.parallax_container {
+  overflow: hidden;
+}
+
+.parallax .scroller {
+  text-transform: uppercase;
+  display: flex;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+}

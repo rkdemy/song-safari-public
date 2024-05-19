@@ -1,0 +1,112 @@
+.song_container {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.song_container__scroll {
+  max-height: 280px;
+  overflow: hidden;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(169px, auto));
+  background-color: #18191f;
+  padding: 0.1rem 0.1rem;
+  place-items: center;
+  border: 1px solid white;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.song_container__scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.song_container__scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.song_container__scroll::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+.song_container__scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.song_container__content {
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  height: min-content;
+  position: relative;
+}
+
+.song_container h1 {
+  padding: 0;
+  margin: 0;
+}
+
+.image {
+  display: flex;
+  align-items: center;
+}
+
+.image img {
+  height: 50px;
+  width: 50px;
+}
+
+.song_details {
+  display: flex;
+  max-width: 170px;
+  width: 170px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 1rem;
+  font-family: "IBM Plex Mono";
+  text-transform: uppercase;
+}
+
+.song_details h3 {
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.artists_names {
+  display: flex;
+  gap: 1rem;
+}
+
+.song_container__content li {
+  width: 45px;
+  height: 45px;
+  list-style-type: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 150px;
+  background: #e0e0e0;
+  box-shadow: 6px 6px 12px #bebebe, -6px -6px 12px #f9f9f9;
+}
+
+.song_container__content h3,
+.song_container__content h4 {
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
