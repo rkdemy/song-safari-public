@@ -1,27 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styling/Playlist.module.css";
 import ParallaxText from "../utilities/ParallaxText";
-
-interface PlaylistData {
-  href: string;
-  items: Array<{
-    name: string;
-    href: string;
-    tracks: {
-      total: number;
-    };
-    images: Array<{
-      url: string;
-      height: number;
-      width: number;
-    }>;
-  }>;
-  limit: number;
-  next: null | string;
-  offset: number;
-  previous: null | string;
-  total: number;
-}
+import { PlaylistData } from "../types/types";
 
 interface PlaylistProps {
   data: PlaylistData;
@@ -38,6 +18,7 @@ const Playlist: React.FC<PlaylistProps> = ({
 }) => {
   const [selectedPlaylist, setSelectedPlaylist] = useState<string | null>();
 
+  // Sets the initial playlist on component mount.
   useEffect(() => {
     if (data && data.items && !loading && !selectedPlaylist) {
       setSelectedPlaylist(data.items[0].href);

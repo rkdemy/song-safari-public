@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import ParallaxText from "../utilities/ParallaxText";
+import { Playlist } from "../types/types";
 
 interface RecommendedPlaylistProps {
   handlePlaylistSelect: (index: number) => void;
@@ -11,14 +12,17 @@ interface RecommendedPlaylistProps {
 const RecommendedPlaylist: React.FC<RecommendedPlaylistProps> = ({
   handlePlaylistSelect,
 }) => {
-  const { data } = useSelector((state: RootState) => state.newPlaylists);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<number | null>();
+  const { data }: { data: Playlist[][] } = useSelector(
+    (state: RootState) => state.newPlaylists
+  );
+  const [selectedPlaylist, setSelectedPlaylist] = useState<number | null>(null);
 
-  const handleNewPlaylist = (index: number) => {
+  const handleNewPlaylist = (index: number): void => {
     handlePlaylistSelect(index);
     setSelectedPlaylist(index);
   };
 
+  // When component mounts, sets the initial Playlist and song.
   useEffect(() => {
     setSelectedPlaylist(0);
     handlePlaylistSelect(0);

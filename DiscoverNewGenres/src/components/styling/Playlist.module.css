@@ -1,13 +1,12 @@
 .song_container {
-  margin-bottom: 1rem;
   width: 100%;
 }
 
 .song_container__scroll {
   max-height: 280px;
+  margin-bottom: 2rem;
   overflow: hidden;
   overflow-y: auto;
-  margin-top: 0.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(169px, auto));
   background-color: #18191f;

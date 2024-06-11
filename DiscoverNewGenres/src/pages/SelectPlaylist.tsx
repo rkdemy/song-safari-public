@@ -3,7 +3,7 @@ import styles from "./styling/SelectPlaylist.module.css";
 import MusicPlayer from "../components/MusicPlayer";
 import Songs from "../components/Songs";
 import Playlist from "../components/Playlist";
-import { getUserAccount, populateUI } from "../realUtility/getUserProfile";
+import { getUserAccount, populateUI } from "../utilities/getUserProfile";
 import { updateSelectedSong } from "../redux/UpdateMusicPlayer";
 import { useDispatch } from "react-redux";
 import {
@@ -12,18 +12,20 @@ import {
 } from "../utilities/authCodeWithPkce";
 import { resetPlaylistData, setNewPlaylistData } from "../redux/AnalyzeSongs";
 import { useNavigate } from "react-router-dom";
+import { PlaylistData, Song } from "../types/types";
 
 const SelectPlaylist = () => {
-  const [playlistData, setPlaylistData] = useState();
-  const [isPlaylistSongs, setPlaylistSongs] = useState(null);
-  const [isLoading, setLoading] = useState<boolean>(true);
-  const [similarityThreshold, setSimilarityThreshold] = useState<number>(2);
+  const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
+  const [isPlaylistSongs, setPlaylistSongs] = useState<Song | null>(null);
+  const [isLoading, setLoading] = useState(true);
+  const [similarityThreshold, setSimilarityThreshold] = useState(2);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Initial User Data fetch
   useEffect(() => {
-    const handleUserAccount = async () => {
+    const handleUserAccount = async (): Promise<void> => {
       dispatch(resetPlaylistData());
 
       setLoading(true);
@@ -35,17 +37,26 @@ const SelectPlaylist = () => {
           setError("Playlist data or songs not available");
           throw new Error("Playlist data or songs not available");
         }
+
+        const filteredSongs = playlistSongs.tracks.items.filter(
+          (item) => item.track && item.track.type === "track"
+        );
+
         setPlaylistData(playlistData);
-        setPlaylistSongs(playlistSongs);
-        if (playlistSongs.tracks.items.length > 0) {
-          const firstSong = playlistSongs.tracks.items[0].track;
+        setPlaylistSongs({
+          ...playlistSongs,
+          tracks: { items: filteredSongs },
+        });
+
+        if (filteredSongs.length > 0) {
+          const firstSong = filteredSongs[0].track;
           const initialMusicPlayer = {
             name: firstSong.name,
             image: firstSong.album.images[0].url,
-            preview: firstSong.uri,
+            uri: firstSong.uri,
             artists: firstSong.artists,
             duration_ms: firstSong.duration_ms,
-            numberOfSongs: playlistSongs.tracks.items.length,
+            numberOfSongs: filteredSongs.length,
           };
 
           dispatch(updateSelectedSong(initialMusicPlayer));
@@ -62,26 +73,32 @@ const SelectPlaylist = () => {
   }, []);
 
   // If another playlist is clicked.
-  const handlePlaylistSelect = async (href: string) => {
+  const handlePlaylistSelect = async (href: string): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
       const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
-        // Call getPlaylistSongs to fetch songs
         const playlistSongs = await getPlaylistSongs(accessToken, href);
 
-        setPlaylistSongs(playlistSongs);
+        const filteredSongs = playlistSongs.tracks.items.filter(
+          (item) => item.track && item.track.type === "track"
+        );
 
-        if (playlistSongs.tracks.items.length > 0) {
-          const firstSong = playlistSongs.tracks.items[0].track;
+        setPlaylistSongs({
+          ...playlistSongs,
+          tracks: { items: filteredSongs },
+        });
+
+        if (filteredSongs.length > 0) {
+          const firstSong = filteredSongs[0].track;
           const initialMusicPlayer = {
             name: firstSong.name,
             image: firstSong.album.images[0].url,
-            preview: firstSong.uri,
+            uri: firstSong.uri,
             artists: firstSong.artists,
             duration_ms: firstSong.duration_ms,
-            numberOfSongs: playlistSongs.tracks.items.length,
+            numberOfSongs: filteredSongs.length,
           };
 
           dispatch(updateSelectedSong(initialMusicPlayer));
@@ -95,7 +112,7 @@ const SelectPlaylist = () => {
   };
 
   // Confirm Playlist Analysis
-  const handleAnalysePlaylist = async () => {
+  const handleAnalysePlaylist = async (): Promise<void> => {
     setLoading(true);
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -152,16 +169,16 @@ const SelectPlaylist = () => {
           <Songs data={isPlaylistSongs} loading={isLoading} error={error} />
 
           <div className={styles.similarityThreshold}>
-            <h3>
-              Determines how similar the new genre will be:
+            <h4>
+              Determines similarity of the new genre:
               <span className={styles.thresholdValue}>
                 {similarityThreshold == 1 ? (
-                  <>{similarityThreshold} returns the same genre</>
+                  <>{similarityThreshold} returns same genre</>
                 ) : (
                   similarityThreshold
                 )}
               </span>
-            </h3>
+            </h4>
             <input
               type="range"
               id="similarityThreshold"
@@ -179,7 +196,7 @@ const SelectPlaylist = () => {
             className={styles.confirmButton}
             onClick={() => handleAnalysePlaylist()}
           >
-            Confirm Playlist to Analyse
+            Confirm Playlist
           </button>
         </div>
 

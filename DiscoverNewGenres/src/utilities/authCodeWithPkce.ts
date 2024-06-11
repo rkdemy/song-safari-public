@@ -1,3 +1,6 @@
+import axios from "axios";
+import { PlaylistData, Song } from "../types/types";
+
 export async function redirectToAuthCodeFlow(clientId: string) {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
@@ -34,32 +37,39 @@ export async function getAccessToken(clientId: string, code: string) {
   );
   params.append("code_verifier", verifier!);
 
-  const result = await fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: params,
-  });
+  try {
+    const response = await axios.post(
+      "https://accounts.spotify.com/api/token",
+      params,
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
 
-  const { access_token, refresh_token } = await result.json();
-  console.log("refresh token", refresh_token);
-  return access_token;
+    const { access_token } = response.data;
+    return access_token;
+  } catch (error) {
+    console.error("Error while getting access token:", error);
+    throw error;
+  }
 }
 
-export async function getUserPlaylist(accessToken: string, profile: any) {
+export async function getUserPlaylist(
+  accessToken: string,
+  profile: any
+): Promise<{
+  playlistData: PlaylistData;
+  playlistSongs: Song;
+}> {
   try {
-    const result = await fetch(
+    const response = await axios.get(
       `https://api.spotify.com/v1/users/${profile.id}/playlists`,
       {
-        method: "GET",
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
 
-    if (!result.ok) {
-      throw new Error("Failed to fetch your playlists");
-    }
-
-    const playlistData = await result.json();
+    const playlistData = response.data;
 
     // Call getPlaylistSongs
     const playlistSongs = await getPlaylistSongs(
@@ -70,7 +80,7 @@ export async function getUserPlaylist(accessToken: string, profile: any) {
     return { playlistData, playlistSongs };
   } catch (error) {
     console.error("Error fetching user playlists:", error);
-    return error;
+    throw error;
   }
 }
 
@@ -78,15 +88,14 @@ export const getPlaylistSongs = async (
   accessToken: string,
   playlistId: string
 ) => {
-  const result = await fetch(playlistId, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  try {
+    const response = await axios.get(playlistId, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
 
-  if (result.ok) {
-    const data = await result.json();
-    return data;
-  } else {
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch your playlist songs:", error);
     throw new Error("Failed to fetch your playlist songs");
   }
 };
@@ -137,21 +146,21 @@ export const getSongFeatures = async (tracks: any, accessToken: string) => {
 };
 
 const fetchArtistGenres = async (artistIds: string, accessToken: string) => {
-  const genresResponse = await fetch(
-    `https://api.spotify.com/v1/artists?ids=${artistIds}`,
-    {
-      method: "GET",
-      headers: { Authorization: `Bearer ${accessToken}` },
-    }
-  );
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists?ids=${artistIds}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
 
-  if (!genresResponse.ok) {
+    const genresData = response.data;
+    const genres = genresData.artists.flatMap((artist: any) => artist.genres);
+    return genres;
+  } catch (error) {
+    console.error("Failed to fetch genres for artist:", error);
     throw new Error("Failed to fetch genres for artist");
   }
-
-  const genresData = await genresResponse.json();
-  const genres = genresData.artists.flatMap((artist: any) => artist.genres);
-  return genres;
 };
 
 async function generateCodeChallenge(codeVerifier: string) {

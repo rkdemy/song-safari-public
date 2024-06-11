@@ -3,7 +3,6 @@
   margin: 0;
   display: flex;
   flex-wrap: nowrap;
-  font-family: "IBM Plex Mono";
 }
 
 .parallax:nth-child(1) {

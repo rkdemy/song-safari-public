@@ -7,28 +7,7 @@ import { RootState } from "../redux/store";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-interface TrackItem {
-  track: {
-    album: {
-      images: {
-        url: string;
-      }[];
-    };
-    name: string;
-    artists: {
-      name: string;
-    }[];
-    duration_ms: number;
-    uri: string;
-  };
-}
-
-interface Song {
-  tracks: {
-    items: TrackItem[];
-  };
-}
+import { Song } from "../types/types";
 
 interface SongsProps {
   data: Song | undefined; // Update the type of data to Song | undefined
@@ -46,6 +25,7 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
   );
   const dispatch = useDispatch();
 
+  // Resets Slider position back to start.
   useEffect(() => {
     if (data && data.tracks && !loading) {
       setSelectedSong(0);
@@ -55,6 +35,7 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
     }
   }, [data, loading]);
 
+  // Changes MusicPlayer component to selected song.
   const handleClick = (index: number) => {
     if (selectedSong === index || !data || !data.tracks) {
       return;
@@ -70,7 +51,7 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
     const initialMusicPlayer = {
       name: firstSong.name,
       image: firstSong.album.images[0].url,
-      preview: firstSong.uri,
+      uri: firstSong.uri,
       artists: firstSong.artists,
       duration_ms: firstSong.duration_ms,
       index,
@@ -80,6 +61,7 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
     dispatch(updateSelectedSong(initialMusicPlayer));
   };
 
+  // Highlights current song when MusicPlayer next/prev button is clicked. 
   useEffect(() => {
     if (index !== undefined && index !== selectedSong) {
       handleClick(index);
@@ -120,13 +102,15 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
       {
         breakpoint: 660,
         settings: {
-          slidesToShow: 3,
+          arrows: true,
+          slidesToShow: 4,
         },
       },
       {
         breakpoint: 512,
         settings: {
-          slidesToShow: 2,
+          arrows: true,
+          slidesToShow: 3,
         },
       },
     ],
@@ -162,11 +146,7 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
             <Slider {...settings} ref={selectedSongRef}>
               {data?.tracks.items.map((x: any, index: number) => (
                 <div
-                  className={`${styles.song_container__content} ${
-                    index === selectedSong
-                      ? styles.song_container__content_selected
-                      : ""
-                  }`}
+                  className={styles.song_container__content}
                   key={index}
                   onClick={() => handleClick(index)}
                 >
@@ -176,7 +156,11 @@ const Songs: React.FC<SongsProps> = ({ data, loading, error }) => {
                         {x.track?.album?.images?.[1]?.url && (
                           <img
                             src={x.track.album.images[1].url}
-                            className={styles.song_image}
+                            className={`${styles.song_image} ${
+                              index === selectedSong
+                                ? styles.song_container__content_selected
+                                : ""
+                            }`}
                             alt="Song cover"
                           />
                         )}

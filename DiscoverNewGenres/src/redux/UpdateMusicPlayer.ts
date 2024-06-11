@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: MusicPlayer = {
   name: "",
   image: "",
-  preview: "",
+  uri: "",
   artists: [],
   duration_ms: 0,
   index: 0,
@@ -18,7 +18,7 @@ const UpdateMusicPlayer = createSlice({
     updateSelectedSong: (state, action: PayloadAction<MusicPlayer>) => {
       state.name = action.payload.name;
       state.image = action.payload.image;
-      state.preview = action.payload.preview;
+      state.uri = action.payload.uri;
       state.artists = action.payload.artists;
       state.duration_ms = action.payload.duration_ms;
       state.index = action.payload.index;

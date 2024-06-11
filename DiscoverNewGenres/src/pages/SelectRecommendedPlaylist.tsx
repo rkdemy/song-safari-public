@@ -9,11 +9,11 @@ const SelectRecommendedPlaylist = () => {
   const [index, setIndex] = useState<number>(0);
   const navigate = useNavigate();
 
-  const handlePlaylistSelect = async (index: number) => {
+  const handlePlaylistSelect = (index: number): void => {
     setIndex(index);
   };
 
-  const handleBackButton = () => {
+  const handleBackButton = (): void => {
     navigate("/SelectPlaylist");
   };
 
@@ -27,8 +27,12 @@ const SelectRecommendedPlaylist = () => {
           {/* Song */}
           <RecommendedSongs idx={index} />
 
-          <button className={styles.confirmButton} onClick={handleBackButton}>
-            Go back
+          <button
+            className={styles.confirmButton}
+            onClick={handleBackButton}
+            style={{ marginTop: "1.5rem" }}
+          >
+            Go Back
           </button>
         </div>
         <div className={styles.musicPlayer_content}>

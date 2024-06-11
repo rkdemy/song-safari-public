@@ -48,10 +48,29 @@
   cursor: pointer;
   background-color: white;
   color: black;
-  width: fit-content;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 18px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  width: fit-content;
+  display: flex;
+  color: #2e2e2e;
+  padding: 0.5rem 1.4rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  align-items: center;
+  border-radius: 0.5rem;
+  gap: 0.75rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: 0.6s ease;
 }
 
 .confirmButton:hover {
@@ -60,13 +79,13 @@
 }
 
 .similarityThreshold {
-  margin-bottom: 20px;
+  margin-bottom: 2.4rem;
   animation: fadeIn 1s ease-in-out;
 }
 
-.similarityThreshold h3 {
-  font-family: "IBM Plex Mono";
-  font-size: 16px;
+.similarityThreshold h4 {
+  margin: 0;
+  font-weight: 500;
 }
 
 .sliderContainer {
@@ -99,7 +118,8 @@
 }
 
 .thresholdValue {
-  font-size: 24px;
+  font-size: 16px;
+  font-family: "IBM Plex Mono";
   text-decoration: underline;
   margin-left: 0.5rem;
 }
@@ -132,18 +152,21 @@
     width: 100%;
     gap: 0rem;
   }
-}
 
-@media screen and (max-width: 450px) {
-  .selectedPlaylist_container {
-    padding: 1rem;
+  .musicPlayer_content {
+    margin-top: 2rem;
+    max-width: 100%;
   }
 
   .selectedPlaylist_container {
     display: block;
   }
+}
 
-  .musicPlayer_content {
-    margin-top: 2rem;
+@media screen and (max-width: 500px) {
+  .confirmButton {
+    width: 100%;
+    font-size: 17px;
+    justify-content: center;
   }
 }

@@ -8,14 +8,19 @@ import { nextSong, previousSong } from "../redux/UpdateMusicPlayer";
 import SpotifyPlayer from "react-spotify-web-playback";
 
 const MusicPlayer: React.FC<MusicPlayer> = () => {
-  const [maxSongs, setMaxSongs] = useState<number>(0);
+  const [maxSongs, setMaxSongs] = useState(0);
   const [isResponsive, setIsResponsive] = useState(window.innerWidth > 1200);
   const dispatch = useDispatch();
   const playerRef = React.useRef<SpotifyPlayer | null>(null);
 
-  const { name, image, preview, index, numberOfSongs } = useSelector(
+  const { name, image, uri, index, numberOfSongs } = useSelector(
     (state: RootState) => state.musicPlayer
   );
+
+  const customLocale = {
+    next: "Custom Next",
+    previous: "Custom Previous",
+  };
 
   const handleNext = () => {
     if (index === maxSongs - 1) {
@@ -31,10 +36,14 @@ const MusicPlayer: React.FC<MusicPlayer> = () => {
     dispatch(previousSong());
   };
 
+  // Basically setting the max length of the current playlist.
+  // There is room for improvement. Currently if i don't reset the maxSongs every new song. The maxSongs becomes 0.
+  // Perhaps I misconfigured Redux.
   useEffect(() => {
     setMaxSongs(numberOfSongs ?? 0);
   }, [index, name]);
 
+  // Listens for button press on the next/prev buttons
   useEffect(() => {
     const setupButtonListeners = () => {
       let nextButton = document.querySelector('[aria-label="Custom Next"]');
@@ -60,24 +69,21 @@ const MusicPlayer: React.FC<MusicPlayer> = () => {
         prevButton.removeEventListener("click", handlePrevious);
       }
     };
-  }, [preview]);
+  }, [uri]);
 
-  const customLocale = {
-    next: "Custom Next",
-    previous: "Custom Previous",
-  };
-
+  // Used in conjunction with the callback inside SpotifyPlaylist component.
+  // Next song is selected when current song ends.
   useEffect(() => {
     const callbackFunction = playerRef.current?.props.callback;
     if (callbackFunction && playerRef.current) {
       const intervalId = setInterval(() => {
-        {/*@ts-ignore*/}
+        /*@ts-ignore*/
         callbackFunction({ position: playerRef.current?.state.position });
       }, 1000);
 
       return () => clearInterval(intervalId);
     }
-  }, [preview]);
+  }, [uri]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,7 +91,7 @@ const MusicPlayer: React.FC<MusicPlayer> = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Initialize the state based on the current window size
+    handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -93,19 +99,29 @@ const MusicPlayer: React.FC<MusicPlayer> = () => {
   }, []);
 
   return (
-    <section className={styles.musicPlayer_container}>
+    <section
+      className={
+        isResponsive
+          ? styles.musicPlayer_container
+          : styles.musicPlayer_container_phone
+      }
+    >
       {image && isResponsive && (
         <div className={styles.track_image_container}>
           <img src={image} alt="Song cover" className={styles.track_image} />
+          <img src={image} alt="Song cover" className={styles.blur} />
         </div>
       )}
 
-      <img src={image} alt="Song cover" className={styles.blur} />
-      {preview && (
+      {!isResponsive && (
+        <img src={image} alt="Song cover" className={styles.blur} />
+      )}
+
+      {uri && (
         <div className={styles.player_wrapper}>
           <SpotifyPlayer
             token={localStorage.getItem("accessToken") ?? ""}
-            uris={[preview]}
+            uris={[uri]}
             ref={playerRef}
             initialVolume={0.4}
             play={true}

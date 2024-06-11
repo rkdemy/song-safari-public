@@ -6,16 +6,19 @@ import { updateSelectedSong } from "../redux/UpdateMusicPlayer";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Playlist } from "../types/types";
 
-const RecommendedSongs = ({ idx }) => {
+const RecommendedSongs = ({ idx }: { idx: number }) => {
   const [selectedSong, setSelectedSong] = useState<number | null>();
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const selectedSongRef = useRef<Slider>(null);
-
-  const { data } = useSelector((state: RootState) => state.newPlaylists);
+  const { data }: { data: Playlist[] } = useSelector(
+    (state: RootState) => state.newPlaylists
+  );
   const { index } = useSelector((state: RootState) => state.musicPlayer);
   const dispatch = useDispatch();
 
+  // When new playlist is selected. Displays the first song in the playlist.
   useEffect(() => {
     setSelectedSong(0);
     handleClick(0);
@@ -24,6 +27,7 @@ const RecommendedSongs = ({ idx }) => {
     }
   }, [data, idx]);
 
+  // Sets the new selected song
   useEffect(() => {
     if (index !== undefined && index !== selectedSong) {
       handleClick(index);
@@ -34,9 +38,9 @@ const RecommendedSongs = ({ idx }) => {
     return null;
   }
 
-  const targetedObject = data[0][idx];
+  const targetedObject: Playlist = data[0][idx];
 
-  const handleClick = (songIndex: number) => {
+  const handleClick = (songIndex: number): void => {
     if (!data[0] || !data[0][idx]) {
       return;
     }
@@ -53,7 +57,7 @@ const RecommendedSongs = ({ idx }) => {
         firstSong.album.images[0].url !== null
           ? firstSong.album.images[0].url
           : "",
-      preview: firstSong.uri,
+      uri: firstSong.uri,
       duration_ms: firstSong.duration_ms,
       index: songIndex,
       numberOfSongs: data[0][idx].items.length,
@@ -96,13 +100,15 @@ const RecommendedSongs = ({ idx }) => {
       {
         breakpoint: 660,
         settings: {
-          slidesToShow: 3,
+          arrows: true,
+          slidesToShow: 4,
         },
       },
       {
         breakpoint: 512,
         settings: {
-          slidesToShow: 2,
+          arrows: true,
+          slidesToShow: 3,
         },
       },
     ],
@@ -129,11 +135,7 @@ const RecommendedSongs = ({ idx }) => {
         <Slider {...settings} ref={selectedSongRef}>
           {targetedObject?.items.map((song: any, songIndex: number) => (
             <div
-              className={`${styles.song_container__content} ${
-                songIndex === selectedSong
-                  ? styles.song_container__content_selected
-                  : ""
-              }`}
+              className={styles.song_container__content}
               key={songIndex}
               onClick={() => handleClick(songIndex)}
             >
@@ -142,7 +144,11 @@ const RecommendedSongs = ({ idx }) => {
                   <div className={styles.image}>
                     <img
                       src={song.album.images[0].url}
-                      className={styles.song_image}
+                      className={`${styles.song_image} ${
+                        songIndex === selectedSong
+                          ? styles.song_container__content_selected
+                          : ""
+                      }`}
                       alt="Song cover"
                     />
                     <img

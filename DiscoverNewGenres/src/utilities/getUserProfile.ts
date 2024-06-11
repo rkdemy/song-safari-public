@@ -3,7 +3,8 @@ import {
   redirectToAuthCodeFlow,
   getAccessToken,
   getUserPlaylist,
-} from "../utilities/authCodeWithPkce";
+} from "./authCodeWithPkce";
+import { Playlist, PlaylistData, Song } from "../types/types";
 
 interface UserProfile {
   country: string;
@@ -28,18 +29,21 @@ interface Image {
   height: number;
   width: number;
 }
-const clientId = import.meta.env.VITE_CLIENT_ID;
+const clientId: string = import.meta.env.VITE_CLIENT_ID as string;
 const params = new URLSearchParams(window.location.search);
-const code = params.get("code");
+const code: string | null = params.get("code");
 
-export const getUserAccount = async () => {
+export const getUserAccount = async (): Promise<{
+  playlistData: PlaylistData;
+  playlistSongs: Song;
+}> => {
   if (!code) {
     redirectToAuthCodeFlow(clientId);
   } else {
     try {
-      let accessToken = localStorage.getItem("accessToken");
-      let jwt = localStorage.getItem("jwt");
-      const tokenExpiry = localStorage.getItem("tokenExpiry");
+      let accessToken: string = localStorage.getItem("accessToken");
+      let jwt: string = localStorage.getItem("jwt");
+      const tokenExpiry: string = localStorage.getItem("tokenExpiry");
 
       if (
         accessToken === null ||
@@ -60,7 +64,7 @@ export const getUserAccount = async () => {
         localStorage.setItem("jwt", jwt);
       }
 
-      const profile = await fetchProfile(accessToken);
+      const profile: UserProfile = await fetchProfile(accessToken);
       const { playlistData, playlistSongs } = await getUserPlaylist(
         accessToken,
         profile
@@ -75,19 +79,20 @@ export const getUserAccount = async () => {
 };
 
 const fetchProfile = async (code: string): Promise<UserProfile> => {
-  const result = await fetch("https://api.spotify.com/v1/me", {
-    method: "GET",
-    headers: { Authorization: `Bearer ${code}` },
-  });
+  try {
+    const response = await axios.get("https://api.spotify.com/v1/me", {
+      headers: { Authorization: `Bearer ${code}` },
+    });
 
-  if (!result.ok) {
+    return response.data;
+  } catch (error) {
     throw new Error("Failed to fetch user profile");
   }
-
-  return await result.json();
 };
 
-export const sendAccessTokenToServer = async (accessToken: string) => {
+export const sendAccessTokenToServer = async (
+  accessToken: string
+): Promise<string> => {
   try {
     const response = await axios.post(import.meta.env.VITE_J_TOKEN, {
       accessToken,
@@ -137,7 +142,9 @@ export function populateUI(
     genreOfSongs.push(commonGenres[i].name);
   }
 
-  const fetchGenreCluster = async (accessToken: string) => {
+  const fetchGenreCluster = async (
+    accessToken: string
+  ): Promise<Playlist[]> => {
     const jwt = localStorage.getItem("jwt");
 
     try {
