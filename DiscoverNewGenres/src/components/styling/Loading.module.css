@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.textContainer {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 800px;
+  margin: 0;
+  font-size: 36px;
+  font-family: "Bebas Neue";
+}
+
+.text {
+  transition: transform 0.5s ease;
+}
+
+.words {
+  font-family: "Bebas Neue";
+  display: inline-block;
+  align-items: center;
+  position: relative;
+  vertical-align: middle;
+  width: 800px;
+  height: 50px;
+  border: none;
+  overflow: hidden;
+  box-sizing: content-box;
+  transition: all 1s linear;
+}
+
+.word {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -100%);
+  transition: transform 1s, opacity 0.25s 0.25s;
+}
+
+.current {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.next {
+  transform: translate(-50%, 100%);
+}

@@ -1,9 +1,10 @@
 import styles from "./styling/SelectPlaylist.module.css";
 import RecommendedPlaylist from "../components/RecommendedPlaylist";
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import RecommendedSongs from "../components/RecommendedSongs";
-import MusicPlayer from "../components/MusicPlayer";
 import { useNavigate } from "react-router-dom";
+
+const LazyMusicPlayer = lazy(() => import("../components/MusicPlayer"));
 
 const SelectRecommendedPlaylist = () => {
   const [index, setIndex] = useState<number>(0);
@@ -37,7 +38,9 @@ const SelectRecommendedPlaylist = () => {
         </div>
         <div className={styles.musicPlayer_content}>
           {/* Vinyl Player */}
-          <MusicPlayer />
+          <Suspense fallback={<></>}>
+            <LazyMusicPlayer />
+          </Suspense>
         </div>
       </div>
     </div>

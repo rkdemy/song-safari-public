@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import styles from "./styling/SelectPlaylist.module.css";
-import MusicPlayer from "../components/MusicPlayer";
 import Songs from "../components/Songs";
 import Playlist from "../components/Playlist";
 import { getUserAccount, populateUI } from "../utilities/getUserProfile";
@@ -13,11 +12,16 @@ import {
 import { resetPlaylistData, setNewPlaylistData } from "../redux/AnalyzeSongs";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData, Song } from "../types/types";
+import LoadingSpinner from "../components/LoadingSpinner";
+
+const LoadingPage = lazy(() => import("../components/Loading"));
+const LazyMusicPlayer = lazy(() => import("../components/MusicPlayer"));
 
 const SelectPlaylist = () => {
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
   const [isPlaylistSongs, setPlaylistSongs] = useState<Song | null>(null);
   const [isLoading, setLoading] = useState(true);
+  const [isServerLoading, setServerLoading] = useState(false);
   const [similarityThreshold, setSimilarityThreshold] = useState(2);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
@@ -114,6 +118,7 @@ const SelectPlaylist = () => {
   // Confirm Playlist Analysis
   const handleAnalysePlaylist = async (): Promise<void> => {
     setLoading(true);
+    setServerLoading(true);
     try {
       const accessToken = localStorage.getItem("accessToken");
 
@@ -122,8 +127,6 @@ const SelectPlaylist = () => {
         isPlaylistSongs.tracks &&
         isPlaylistSongs.tracks.items.length > 0
       ) {
-        navigate("/loading");
-
         const songFeatures = await getSongFeatures(
           isPlaylistSongs?.tracks.items,
           accessToken
@@ -136,11 +139,13 @@ const SelectPlaylist = () => {
           );
           if (newPlaylistData) {
             dispatch(setNewPlaylistData(newPlaylistData));
+            setServerLoading(false);
             setLoading(false);
             navigate("/SelectRecommendedSongs");
           } else {
             // Handle error if newPlaylistData is null
             setError("Error contacting server.");
+            setServerLoading(false);
             setLoading(false);
             navigate("/SelectPlaylist");
           }
@@ -152,6 +157,14 @@ const SelectPlaylist = () => {
       navigate("/SelectPlaylist");
     }
   };
+
+  if (isServerLoading) {
+    return (
+      <Suspense fallback={<></>}>
+        <LoadingPage />
+      </Suspense>
+    );
+  }
 
   return (
     <div className={styles.selectPlaylist}>
@@ -202,7 +215,9 @@ const SelectPlaylist = () => {
 
         <div className={styles.musicPlayer_content}>
           {/* Vinyl Player */}
-          <MusicPlayer />
+          <Suspense fallback={<></>}>
+            <LazyMusicPlayer />
+          </Suspense>
         </div>
       </div>
     </div>

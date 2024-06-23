@@ -87,7 +87,6 @@
   width: 45px;
   height: 45px;
   list-style-type: none;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,5 +106,19 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .song_container__scroll {
+    grid-template-columns: repeat(auto-fit, minmax(150px, auto));
+  }
+
+  .song_details {
+    padding: 0.3rem;
+    max-width: 150px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    width: 150px;
   }
 }

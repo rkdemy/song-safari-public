@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
 import styles from "../pages/styling/Hero.module.css";
 import ParallaxText from "../utilities/ParallaxText";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import TextAnimation from "../utilities/TextAnimation";
+
+const phrases = ["PEACE", "ANGER", "ENERGY", "JOY", "SADNESS", "FEAR", "LOVE"];
 
 const LeftHero = ({
   handleLogin,
@@ -14,42 +16,6 @@ const LeftHero = ({
   loading?: boolean;
 }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const wrapper = document.querySelector(`.${styles.words}`);
-    const words = wrapper.querySelectorAll(`.${styles.word}`);
-    const currentWord = wrapper.querySelector(`.${styles.current}`);
-    //@ts-ignore
-    const wordsWidths = Array.from(words).map((word) => word.offsetWidth);
-    const maxWordsWidth = Math.max(...wordsWidths);
-    const CURRENT_CLASS = styles.current;
-    const NEXT_CLASS = styles.next;
-    //@ts-ignore
-    wrapper.style.setProperty("--width", `${currentWord.offsetWidth}px`);
-    //@ts-ignore
-    wrapper.style.setProperty("--width-mobile", `${maxWordsWidth}px`);
-
-    const interval = setInterval(() => {
-      const currentWord = wrapper.querySelector(`.${styles.current}`);
-      const nextWord = wrapper.querySelector(`.${styles.next}`);
-      const nextNextWord = nextWord.nextElementSibling
-        ? nextWord.nextElementSibling
-        : wrapper.firstElementChild;
-      currentWord.classList.remove(CURRENT_CLASS);
-      nextWord.classList.remove(NEXT_CLASS);
-      nextWord.classList.add(CURRENT_CLASS);
-      nextNextWord.classList.add(NEXT_CLASS);
-      //@ts-ignore
-      wrapper.style.setProperty("--color", nextWord.dataset.color);
-      //@ts-ignore
-      wrapper.style.setProperty("--color-bg", nextWord.dataset.bgColor);
-      //@ts-ignore
-      wrapper.style.setProperty("--width", `${nextWord.offsetWidth}px`);
-    }, 1800);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className={styles.left}>
       <div className={styles.top_bar}>
@@ -58,57 +24,7 @@ const LeftHero = ({
         </h3>
         <h3 className={styles.sectionTitle}>
           Find
-          <span className={styles.words}>
-            <span
-              className={`${styles.word} ${styles.current}`}
-              data-bg-color="#ffc703"
-              data-color="#000"
-            >
-              PEACE
-            </span>
-            <span
-              className={`${styles.word} ${styles.next}`}
-              data-bg-color="#004e98"
-              data-color="#fff"
-            >
-              ANGER
-            </span>
-            <span
-              className={styles.word}
-              data-bg-color="#104911"
-              data-color="#fff"
-            >
-              ENERGY
-            </span>
-            <span
-              className={styles.word}
-              data-bg-color="#b8c0ff"
-              data-color="#000"
-            >
-              JOY
-            </span>
-            <span
-              className={styles.word}
-              data-bg-color="#e71d36"
-              data-color="#fff"
-            >
-              SADNESS
-            </span>
-            <span
-              className={styles.word}
-              data-bg-color="#e2c044"
-              data-color="#000"
-            >
-              FEAR
-            </span>
-            <span
-              className={styles.word}
-              data-bg-color="#065a82"
-              data-color="#fff"
-            >
-              LOVE
-            </span>
-          </span>
+          <TextAnimation styles={styles} content={phrases} />
           in Music.
         </h3>
       </div>
@@ -116,13 +32,11 @@ const LeftHero = ({
         <ParallaxText baseVelocity={1}>Discover New Genres.</ParallaxText>
       </h1>
       <div>
-        <p>Portfolio Website, Github</p>
         <h3 className={styles.sectionTitle}>
-          A website to help discover new music genres based on your spotify
-          playlist. By analyzing the genres associated with the artists in your
-          playlist, it identifies similar yet distinct genres and recommends new
-          songs to broaden your musical tastes. This website was made possible
-          due to&nbsp;
+          Break free from the monotony of similar songs and explore the
+          diversity of music. Using your Spotify Playlist, adjust the similarity
+          of the new songs we recommend. This website was made possible thanks
+          to&nbsp;
           <a href="https://everynoise.com" target="_blank">
             everynoise.
           </a>

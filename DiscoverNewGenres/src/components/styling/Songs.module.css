@@ -143,12 +143,15 @@
     justify-content: center;
     height: min-content;
     overflow: hidden;
-    padding: 1rem;
+    padding: 0.5rem;
     max-width: 150px;
     z-index: 99;
     border-radius: 20px;
-
     color: #e0e0e0;
+  }
+
+  .blur {
+    opacity: 0.1;
   }
 
   .song_container h1 {
