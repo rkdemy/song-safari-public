@@ -12,17 +12,17 @@ The Problem: Discovering new and diverse music genres can be challenging for use
 The Goal: Help users build more varied and interesting music libraries and enjoy a richer auditory experience. Song Safari leverages users' Spotify playlists to help them discover new music genres. By analyzing the genres of songs in their playlists, the website can recommend related but unfamiliar genres.
 
 ## Tech Stack
-React
-Vite
-JavaScript/TypeScript
-Node.JS
-Redux
-Axios
-Framer Motion
-Google Cloud Function
-Firestore
+- React
+- Vite
+- JavaScript/TypeScript
+- Node.JS
+- Redux
+- Axios
+- Framer Motion
+- Google Cloud Function
+- Firestore
 
 ## Tech Stack to create the Clusters
-R/Rstudio
-Weka
-Regex
+- R/Rstudio
+- Weka
+- Regex
