@@ -163,7 +163,7 @@ const calculateClusterMap = async (
       nearestGenres.sort((a, b) => a.distance - b.distance);
 
       // Select the genre based on the similarity threshold
-      const selectedGenre = nearestGenres[similarityThreshold - 1]; // Adjust index for 0-based array
+      const selectedGenre = nearestGenres[similarityThreshold - 1];
 
       if (!selectedGenre) {
         break;
