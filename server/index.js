@@ -100,11 +100,7 @@ const calculateClusterMap = async (
   try {
     const clusterKey = genre.Cluster;
 
-    if (
-      clusterMap[clusterKey] &&
-      clusterMap[clusterKey][0].Cluster == genre.Cluster
-    ) {
-    } else {
+    if (!clusterMap[clusterKey] && !clusterMap[clusterKey][0].Cluster == genre.Cluster)  {
       // Fetch data from Firestore
       const clusterRef = db.collection("cluster_objects").doc(genre.Cluster);
       const clusterSnapshot = await clusterRef.get();
